@@ -1,0 +1,41 @@
+---
+# Source: gocd-pipeline/templates/usingHelmTempalte1.gocd.yaml
+format_version: 10
+pipelines:
+  build-dynamicPipelines:
+    group: dynamicPipelines
+    environment_variables:
+
+    label_template: "${git[:7]}"
+    materials:
+      git:
+        git: https://github.com/miewone/myfirstgocd
+        username: dlsrk489@gmail.com
+        shallow_clone: false
+        auto_update: true
+        branch: main
+        encrypted_password: AES:5sUlXe66lzHA9oTWBKhE6Q==:lPPFwSHOmcBnLBNYTwi8Oei4PyDa/Sy8f23bn94XJx8tsY6wt5CknPSECNEPux/k
+    stages:
+      - build:
+          jobs:
+            build:
+              tasks:
+               - exec:
+                  command: ./build.sh
+                  run_if: passed
+                   
+      - test:
+          jobs:
+            test:
+              tasks:
+               - exec:
+                  command: ./test.sh
+                  run_if: passed
+                   
+      - deploy:
+          jobs:
+            deploy:
+              tasks:
+               - exec:
+                  command: ./deploy.sh
+                  run_if: passed
