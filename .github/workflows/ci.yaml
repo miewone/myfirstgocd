@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Helm
+        uses: helm/actions/setup-helm@v1
+        
       - name: Grant execute permission for script
         run: chmod +x ./.github/validate.sh
 
