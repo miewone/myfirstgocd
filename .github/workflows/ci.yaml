@@ -16,3 +16,13 @@ jobs:
 
       - name: Validate
         run: ./.github/validate.sh
+      
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          if [[ $(git diff --cached | wc -l) -gt 0 ]]; then
+            git commit -m "Add pipeline"
+            git push
+          fi
