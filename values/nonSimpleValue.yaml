@@ -1,0 +1,4 @@
+buildOnly : false
+name : dynamicPipelines
+branch : main
+run_if_value : passed

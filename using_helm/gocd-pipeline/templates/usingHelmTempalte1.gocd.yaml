@@ -1,0 +1,55 @@
+format_version: 10
+pipelines:
+  build-{{ .Values.name }}:
+    group: {{ .Values.name }}
+    environment_variables:
+
+    label_template: "${git[:7]}"
+    materials:
+      git:
+        git: https://github.com/miewone/myfirstgocd
+        username: dlsrk489@gmail.com
+        shallow_clone: false
+        auto_update: true
+        branch: {{ .Values.branch }}
+        encrypted_password: AES:5sUlXe66lzHA9oTWBKhE6Q==:lPPFwSHOmcBnLBNYTwi8Oei4PyDa/Sy8f23bn94XJx8tsY6wt5CknPSECNEPux/k
+    stages:
+      {{- if .Values.buildOnly}}
+      - build:
+          jobs:
+            build:
+              environment_variables:
+                BUILD_VERSION: 0.0.3
+              tasks:
+               - exec:
+                  command: ./build.sh
+                  run_if: {{ .Values.run_if_value }}
+                   
+      {{- else }}
+      - build:
+          jobs:
+            build:
+              tasks:
+               - exec:
+                  command: ./build.sh
+                  run_if: {{ .Values.run_if_value }}
+                   
+      - test:
+          jobs:
+            test:
+              tasks:
+               - exec:
+                  command: ./test.sh
+                  run_if: {{ .Values.run_if_value }}
+                   
+      - deploy:
+          jobs:
+            deploy:
+              tasks:
+               - exec:
+                  command: ./deploy.sh
+                  run_if: {{ .Values.run_if_value }}
+                   
+
+      {{- end }}
+      
