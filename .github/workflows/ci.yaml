@@ -8,5 +8,11 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Grant execute permission for script
+        run: chmod +x ./.github/validate.sh
+
       - name: Validate
         run: ./.github/validate.sh
